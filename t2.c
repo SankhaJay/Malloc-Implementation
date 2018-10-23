@@ -31,7 +31,7 @@ void *MyMalloc(size_t blocksize){
         previous = current;
         current = current->next;
     }
-    /*if there is a suitable block*/
+    /*if there is a suitable block which has the same size as required*/
     if(current->size == blocksize){
         current->free = 0;//don't have to update meta data here because the data that there is already is enough and correct
         current = current + 1;
@@ -39,8 +39,43 @@ void *MyMalloc(size_t blocksize){
         printf("Block allocation succesful");
         return result;
     } 
+    /*if there is a suitabale block but the size is larger than required.Allocated memory block using split*/
     else if(current->size > blocksize){
         split(current,blocksize);
         current = current + 1;
+        result = (void*)current;
+        printf("Block allocation succesful");
+        return result;
     }
+    /*if code gets here that means there isn't a suitable block*/
+    else{
+        result = NULL;
+        printf("Block allocation unsuccesful !!");
+        return result;
+    }
+}
+
+void merge(){
+    struct info *current;
+    current = freelist; //initializing current to the start of the memory
+    while(current->next){ //loopig through memory fromm the beginning
+        if(current->free && (current->next->free)){ //checking whether adjacent blocks are free
+            current->next = current->next->next; //combining two blocks
+            current->size = current->size+current->next->size + sizeof(struct info); //increasing the size of the new block(current)
+        }
+    current = current->next;
+    }
+}
+
+void MyFree(void* ptr){
+    if((ptr>=(void*)memory && ptr<=(void*)(memory+25000))){//ptr has to be between 'memory' and 'memory' + 25000
+        struct info* new = ptr;
+        new = new - 1; //to access meta data block 
+        new->free = 1;
+        merge();  
+    }
+    else
+        printf("Provided pointer is not valid")
+    
+     
 }

@@ -1,4 +1,4 @@
-#include<stdio.h>
+git #include<stdio.h>
 #include<stddef.h>
 
 char memory[25000];
@@ -15,4 +15,4 @@ void init();
 void *MyMalloc(size_t blocksize);
 void MyFree(void* ptr);
 void split(struct info* slot,size_t blocksize);
-void merge();
+void merge(vooid *ptr);
