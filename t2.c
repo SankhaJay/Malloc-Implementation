@@ -41,5 +41,6 @@ void *MyMalloc(size_t blocksize){
     } 
     else if(current->size > blocksize){
         split(current,blocksize);
+        current = current + 1;
     }
 }
