@@ -1,5 +1,6 @@
-git #include<stdio.h>
+#include<stdio.h>
 #include<stddef.h>
+#define t1
 
 char memory[25000];
 
@@ -9,10 +10,13 @@ struct info{
     struct info* next;//pointer to find the next block
 };
 
-struct info *freelist = (void*)memory;
+//struct info *freelist = (void*)memory;
 
 void init();
-void *MyMalloc(size_t blocksize);
+void* MyMalloc(size_t blocksize);
 void MyFree(void* ptr);
 void split(struct info* slot,size_t blocksize);
-void merge(vooid *ptr);
+void merge();
+
+
+

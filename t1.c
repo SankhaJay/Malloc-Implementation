@@ -2,14 +2,16 @@
 #include<stddef.h>
 #include "t1.h"
 
+struct info *freelist = (void*)memory;
+
 void init(){
-    freelist -> size = 25000 - sizeof(struct info);//decresing memeory for the first meta data block
-    freelist -> free = 1;
-    freelist -> next = NULL;//end of the array
+    freelist->size = 25000 - sizeof(struct info);//decresing memeory for the first meta data block
+    freelist->free = 1;
+    freelist->next = NULL;//end of the array
 }
 
 void merge(){
-    struct info *current;
+    struct info* current;
     current = freelist; //initializing current to the start of the memory
     while(current->next){ //loopig through memory fromm the beginning
         if(current->free && (current->next->free)){ //checking whether adjacent blocks are free
@@ -31,9 +33,10 @@ void split(struct info* slot,size_t blocksize){
 
 }
 
-void *MyMalloc(size_t blocksize){
-    struct info *current,*previous;
-    void *result;//this will be the return value of malloc function
+void* MyMalloc(size_t blocksize){
+    struct info* current;
+    struct info* previous;
+    void* result;//this will be the return value of malloc function
     
     if(!(freelist->size)){
         init();
