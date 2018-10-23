@@ -9,6 +9,13 @@ void init(){
 }
 
 void split(struct info* slot,size_t blocksize){
+    struct info* new =  ;//"new" is the extra memory block
+    new->size = slot->size - size - sizeof(struct block);//seperting the extra memory block as "new"
+    new->free = 1;
+    new->next = slot->next;//slot->next is still unchanged at this line of code
+    slot->next = new;
+    slot->free = 0;
+
 }
 
 void *MyMalloc(size_t blocksize){
@@ -26,8 +33,13 @@ void *MyMalloc(size_t blocksize){
     }
     /*if there is a suitable block*/
     if(current->size == blocksize){
-        current->free = 0;
-        result = 
+        current->free = 0;//don't have to update meta data here because the data that there is already is enough and correct
+        current = current + 1;
+        result = (void*)current;
+        printf("Block allocation succesful");
+        return result;
     } 
-    
+    else if(current->size > blocksize){
+        split(current,blocksize);
+    }
 }
