@@ -2,14 +2,16 @@
 #include<stddef.h>
 #include "t1.h"
 
+struct info *freelist = (void*)memory;
+
 void init(){
-    freelist -> size = 25000 - sizeof(struct info);//decresing memeory for the first meta data block
-    freelist -> free = 1;
-    freelist -> next = NULL;//end of the array
+    freelist->size = 25000 - sizeof(struct info);//decresing memeory for the first meta data block
+    freelist->free = 1;
+    freelist->next = NULL;//end of the array
 }
 
 void merge(){
-    struct info *current;
+    struct info* current;
     current = freelist; //initializing current to the start of the memory
     while(current->next){ //loopig through memory fromm the beginning
         if(current->free && (current->next->free)){ //checking whether adjacent blocks are free
@@ -27,13 +29,15 @@ void split(struct info* slot,size_t blocksize){
     new->next = slot->next;//slot->next is still unchanged at this line of code
     slot->next = new;
     slot->free = 0;
+    slot->size = blocksize;
     merge();//Merge the new block if possible
 
 }
 
-void *MyMalloc(size_t blocksize){
-    struct info *current,*previous;
-    void *result;//this will be the return value of malloc function
+void* MyMalloc(size_t blocksize){
+    struct info* current;
+    struct info* previous;
+    void* result;//this will be the return value of malloc function
     
     if(!(freelist->size)){
         init();
@@ -49,7 +53,7 @@ void *MyMalloc(size_t blocksize){
         current->free = 0;//don't have to update meta data here because the data that there is already is enough and correct
         current = current + 1;
         result = (void*)current;
-        printf("Block allocation succesful");
+        printf("Block allocation succesful\n");
         return result;
     } 
     /*if there is a suitabale block but the size is larger than required.Allocated memory block using split*/
@@ -57,13 +61,13 @@ void *MyMalloc(size_t blocksize){
         split(current,blocksize);
         current = current + 1;
         result = (void*)current;
-        printf("Block allocation succesful");
+        printf("Block allocation succesful\n");
         return result;
     }
     /*if code gets here that means there isn't a suitable block*/
     else{
         result = NULL;
-        printf("Block allocation unsuccesful !!");
+        printf("Block allocation unsuccesful !!\n");
         return result;
     }
 }
@@ -74,7 +78,8 @@ void MyFree(void* ptr){
         new = new - 1; //to access meta data block 
         new->free = 1;
         merge();  
+        printf("Succesfully\n");
     }
     else
-        printf("Provided pointer is not valid");
+        printf("Provided pointer is not valid\n");
 }
