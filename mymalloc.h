@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stddef.h>
-#define t1
+#define mymalloc
 
 char memory[25000];
 

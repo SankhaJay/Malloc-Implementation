@@ -1,5 +1,5 @@
 #include<stdio.h>
-#include "t1.h"
+#include "mymalloc.h"
 //#include "malloc.h"
 //char memory[20000];
 int main(){

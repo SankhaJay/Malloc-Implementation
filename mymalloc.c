@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stddef.h>
-#include "t1.h"
+#include "mymalloc.h"
 
 struct info *freelist = (void*)memory;
 
